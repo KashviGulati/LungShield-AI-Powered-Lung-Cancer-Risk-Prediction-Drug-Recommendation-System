@@ -1,18 +1,133 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lung Cancer Risk Prediction</title>
+    <style>
+        /* Dark Theme */
+        body {
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            color: #e0e0e0;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: rgba(40, 40, 40, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 500px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-size: 2em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-size: 1.1em;
+            color: #b0b0b0;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            background: #3a3a3a;
+            color: #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            background: #4a4a4a;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        }
+
+        input[type="submit"] {
+            padding: 12px;
+            font-size: 1.2em;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        input[type="submit"]:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        /* Background Image */
+        .bg-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            z-index: -1;
+            background: url('https://via.placeholder.com/1920x1080?text=Lung+Silhouette') no-repeat center center;
+            background-size: cover;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                width: 95%;
+            }
+            h1 { font-size: 1.5em; }
+            input[type="submit"] { font-size: 1em; }
+        }
+    </style>
 </head>
 <body>
-    <h1>Lung Cancer Risk Prediction</h1>
-    <form action="/predict" method="POST">
-        <label>Age (20-80):</label><input type="number" name="AGE" min="20" max="80" required><br>
-        <label>Gender (1=Male, 2=Female):</label><input type="number" name="GENDER" min="1" max="2" required><br>
-        <label>Smoking (1=No, 2=Yes):</label><input type="number" name="SMOKING" min="1" max="2" required><br>
-        <label>Fatigue (1=No, 2=Yes):</label><input type="number" name="FATIGUE" min="1" max="2" required><br>
-        <label>Wheezing (1=No, 2=Yes):</label><input type="number" name="WHEEZING" min="1" max="2" required><br>
-        <label>Coughing (1=No, 2=Yes):</label><input type="number" name="COUGHING" min="1" max="2" required><br>
-        <input type="submit" value="Predict">
-    </form>
+    <div class="bg-image"></div>
+    <div class="container">
+        <h1>Lung Cancer Risk Prediction</h1>
+        <form action="/predict" method="POST">
+            <label>Age (20-80):</label>
+            <input type="number" name="AGE" min="20" max="80" required>
+            <label>Gender (1=Male, 2=Female):</label>
+            <input type="number" name="GENDER" min="1" max="2" required>
+            <label>Smoking (1=No, 2=Yes):</label>
+            <input type="number" name="SMOKING" min="1" max="2" required>
+            <label>Fatigue (1=No, 2=Yes):</label>
+            <input type="number" name="FATIGUE" min="1" max="2" required>
+            <label>Wheezing (1=No, 2=Yes):</label>
+            <input type="number" name="WHEEZING" min="1" max="2" required>
+            <label>Coughing (1=No, 2=Yes):</label>
+            <input type="number" name="COUGHING" min="1" max="2" required>
+            <input type="submit" value="Predict Risk">
+        </form>
+    </div>
 </body>
 </html>

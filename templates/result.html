@@ -1,12 +1,115 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prediction Result</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            color: #e0e0e0;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: rgba(40, 40, 40, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        h1 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-size: 2em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .result-box {
+            background: #3a3a3a;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            transition: transform 0.3s ease;
+        }
+
+        .result-box:hover {
+            transform: scale(1.02);
+        }
+
+        p {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+
+        .risk-low { color: #4CAF50; }
+        .risk-moderate { color: #FFA726; }
+        .risk-high { color: #EF5350; }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        a:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        .bg-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            z-index: -1;
+            background: url('https://via.placeholder.com/1920x1080?text=Lung+Result') no-repeat center center;
+            background-size: cover;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                width: 95%;
+            }
+            h1 { font-size: 1.5em; }
+            p { font-size: 1em; }
+            a { font-size: 0.9em; }
+        }
+    </style>
 </head>
 <body>
-    <h1>Prediction Result</h1>
-    <p>Risk Level: {{ risk }}</p>
-    <p>Recommended Drug: {{ drug }}</p>
-    <a href="/">Back to Home</a>
+    <div class="bg-image"></div>
+    <div class="container">
+        <h1>Prediction Result</h1>
+        <div class="result-box">
+            <p>Risk Level: <span class="risk-{{ risk.lower() }}">{{ risk }}</span></p>
+            <p>Recommended Drug: {{ drug }}</p>
+        </div>
+        <a href="/">Back to Prediction</a>
+    </div>
 </body>
 </html>
