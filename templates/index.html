@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lung Cancer Risk Prediction</title>
+</head>
+<body>
+    <h1>Lung Cancer Risk Prediction</h1>
+    <form action="/predict" method="POST">
+        <label>Age (20-80):</label><input type="number" name="AGE" min="20" max="80" required><br>
+        <label>Gender (1=Male, 2=Female):</label><input type="number" name="GENDER" min="1" max="2" required><br>
+        <label>Smoking (1=No, 2=Yes):</label><input type="number" name="SMOKING" min="1" max="2" required><br>
+        <label>Anxiety (1=No, 2=Yes):</label><input type="number" name="ANXIETY" min="1" max="2" required><br>
+        <label>Fatigue (1=No, 2=Yes):</label><input type="number" name="FATIGUE" min="1" max="2" required><br>
+        <label>Coughing (1=No, 2=Yes):</label><input type="number" name="COUGHING" min="1" max="2" required><br>
+        <input type="submit" value="Predict">
+    </form>
+</body>
+</html>
