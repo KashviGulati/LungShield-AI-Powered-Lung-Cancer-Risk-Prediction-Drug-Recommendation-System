@@ -5,129 +5,303 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lung Cancer Risk Prediction</title>
     <style>
-        /* Dark Theme */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
         body {
-            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
-            color: #e0e0e0;
-            font-family: 'Arial', sans-serif;
+            background: #0A1414;
+            color: #EDF6F9;
+            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
+            position: relative;
+            transition: opacity 0.5s ease;
         }
 
-        .container {
-            background: rgba(40, 40, 40, 0.95);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
-            width: 90%;
-            max-width: 500px;
-            animation: fadeIn 1s ease-in-out;
+        body.fade-out {
+            opacity: 0;
         }
 
-        h1 {
-            text-align: center;
-            color: #4CAF50;
-            margin-bottom: 20px;
-            font-size: 2em;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        label {
-            font-size: 1.1em;
-            color: #b0b0b0;
-        }
-
-        input[type="number"] {
-            padding: 10px;
-            font-size: 1em;
-            border: none;
-            border-radius: 5px;
-            background: #3a3a3a;
-            color: #e0e0e0;
-            transition: all 0.3s ease;
-        }
-
-        input[type="number"]:focus {
-            outline: none;
-            background: #4a4a4a;
-            box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
-        }
-
-        input[type="submit"] {
-            padding: 12px;
-            font-size: 1.2em;
-            background: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s ease, transform 0.2s ease;
-        }
-
-        input[type="submit"]:hover {
-            background: #45a049;
-            transform: scale(1.05);
-        }
-
-        /* Background Image */
-        .bg-image {
+        .lung-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            opacity: 0.1;
             z-index: -1;
-            background: url('https://via.placeholder.com/1920x1080?text=Lung+Silhouette') no-repeat center center;
-            background-size: cover;
+            background: linear-gradient(135deg, rgba(0, 109, 119, 0.3) 0%, rgba(131, 197, 190, 0.2) 50%, transparent 100%);
+            animation: waveShift 12s ease-in-out infinite;
         }
 
-        /* Animation */
+        .lung-bg::before,
+        .lung-bg::after {
+            content: '';
+            position: absolute;
+            width: 250px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(131, 197, 190, 0.3) 20%, transparent 60%);
+            border-radius: 50% 50% 30% 30%;
+            animation: breatheBg 8s ease-in-out infinite;
+        }
+
+        .lung-bg::before {
+            top: 35%;
+            left: 15%;
+            transform: rotate(-15deg);
+        }
+
+        .lung-bg::after {
+            top: 35%;
+            right: 15%;
+            transform: rotate(15deg);
+        }
+
+        .container {
+            background: rgba(10, 20, 20, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 109, 119, 0.4);
+            width: 90%;
+            max-width: 600px;
+            animation: fadeIn 1.5s ease-in-out;
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(0, 109, 119, 0.5);
+        }
+
+        h1 {
+            text-align: center;
+            color: #83C5BE;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 0 0 8px rgba(0, 109, 119, 0.4);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .node {
+            width: 16px;
+            height: 16px;
+            background: radial-gradient(circle, #83C5BE 30%, transparent 70%);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 109, 119, 0.6);
+            transition: all 0.3s ease;
+            animation: breatheNode 2s ease-in-out infinite;
+        }
+
+        input[type="number"]:focus + .node {
+            transform: scale(1.3);
+            box-shadow: 0 0 15px rgba(0, 109, 119, 0.8);
+        }
+
+        label {
+            font-size: 1.1em;
+            color: #B0C4DE;
+            position: absolute;
+            top: 12px;
+            left: 40px;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        input[type="number"] {
+            padding: 12px;
+            font-size: 1em;
+            border: 2px solid rgba(0, 109, 119, 0.7);
+            border-radius: 10px;
+            background: rgba(10, 20, 20, 0.8);
+            color: #EDF6F9;
+            width: 100%;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        input[type="number"]:focus {
+            border-color: #83C5BE;
+            box-shadow: 0 0 12px rgba(0, 109, 119, 0.6);
+        }
+
+        input[type="number"]:focus::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(0, 109, 119, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            animation: ripple 0.6s ease-out;
+        }
+
+        input[type="number"]:focus + .node + label,
+        input[type="number"]:not(:placeholder-shown) + .node + label {
+            top: -25px;
+            left: 10px;
+            font-size: 0.9em;
+            color: #83C5BE;
+            text-shadow: 0 0 5px rgba(0, 109, 119, 0.3);
+        }
+
+        input[type="submit"] {
+            padding: 14px;
+            font-size: 1.3em;
+            background: linear-gradient(45deg, #006D77, #83C5BE);
+            color: #EDF6F9;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 0 12px rgba(0, 109, 119, 0.5);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        input[type="submit"]:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 18px rgba(0, 109, 119, 0.7);
+        }
+
+        input[type="submit"]::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(237, 246, 249, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+        }
+
+        input[type="submit"]:hover::after {
+            width: 200%;
+            height: 200%;
+        }
+
+        #progress-bar {
+            display: none;
+            width: 0%;
+            height: 6px;
+            background: linear-gradient(90deg, #006D77, #83C5BE);
+            border-radius: 5px;
+            animation: progress 1.5s ease-in-out forwards;
+            box-shadow: 0 0 10px rgba(0, 109, 119, 0.6);
+            margin-top: 20px;
+        }
+
+        @keyframes waveShift {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+
+        @keyframes breatheBg {
+            0% { transform: scale(1) rotate(-15deg); opacity: 0.8; }
+            50% { transform: scale(1.05) rotate(-15deg); opacity: 1; }
+            100% { transform: scale(1) rotate(-15deg); opacity: 0.8; }
+        }
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
+        @keyframes breatheNode {
+            0% { transform: scale(1); box-shadow: 0 0 10px rgba(0, 109, 119, 0.6); }
+            50% { transform: scale(1.1); box-shadow: 0 0 15px rgba(0, 109, 119, 0.8); }
+            100% { transform: scale(1); box-shadow: 0 0 10px rgba(0, 109, 119, 0.6); }
+        }
+
+        @keyframes ripple {
+            0% { transform: translate(-50%, -50%) scale(0); }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+        }
+
+        @keyframes progress {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+
         @media (max-width: 600px) {
-            .container {
-                padding: 20px;
-                width: 95%;
-            }
-            h1 { font-size: 1.5em; }
-            input[type="submit"] { font-size: 1em; }
+            .container { padding: 25px; width: 95%; }
+            h1 { font-size: 1.8em; }
+            input[type="submit"] { font-size: 1.1em; }
         }
     </style>
 </head>
 <body>
-    <div class="bg-image"></div>
+    <div class="lung-bg"></div>
     <div class="container">
         <h1>Lung Cancer Risk Prediction</h1>
-        <form action="/predict" method="POST">
-            <label>Age (20-80):</label>
-            <input type="number" name="AGE" min="20" max="80" required>
-            <label>Gender (1=Male, 2=Female):</label>
-            <input type="number" name="GENDER" min="1" max="2" required>
-            <label>Smoking (1=No, 2=Yes):</label>
-            <input type="number" name="SMOKING" min="1" max="2" required>
-            <label>Fatigue (1=No, 2=Yes):</label>
-            <input type="number" name="FATIGUE" min="1" max="2" required>
-            <label>Wheezing (1=No, 2=Yes):</label>
-            <input type="number" name="WHEEZING" min="1" max="2" required>
-            <label>Coughing (1=No, 2=Yes):</label>
-            <input type="number" name="COUGHING" min="1" max="2" required>
+        <form id="prediction-form" action="/predict" method="POST" onsubmit="showProgress(event)">
+            <div class="input-group">
+                <input type="number" name="AGE" min="20" max="80" required placeholder=" ">
+                <div class="node"></div>
+                <label>Age (20-80)</label>
+            </div>
+            <div class="input-group">
+                <input type="number" name="GENDER" min="1" max="2" required placeholder=" ">
+                <div class="node"></div>
+                <label>Gender (1=Male, 2=Female)</label>
+            </div>
+            <div class="input-group">
+                <input type="number" name="SMOKING" min="1" max="2" required placeholder=" ">
+                <div class="node"></div>
+                <label>Smoking (1=No, 2=Yes)</label>
+            </div>
+            <div class="input-group">
+                <input type="number" name="FATIGUE" min="1" max="2" required placeholder=" ">
+                <div class="node"></div>
+                <label>Fatigue (1=No, 2=Yes)</label>
+            </div>
+            <div class="input-group">
+                <input type="number" name="WHEEZING" min="1" max="2" required placeholder=" ">
+                <div class="node"></div>
+                <label>Wheezing (1=No, 2=Yes)</label>
+            </div>
+            <div class="input-group">
+                <input type="number" name="COUGHING" min="1" max="2" required placeholder=" ">
+                <div class="node"></div>
+                <label>Coughing (1=No, 2=Yes)</label>
+            </div>
             <input type="submit" value="Predict Risk">
+            <div id="progress-bar"></div>
         </form>
     </div>
+    <script>
+        function showProgress(event) {
+            event.preventDefault();
+            const progressBar = document.getElementById('progress-bar');
+            progressBar.style.display = 'block';
+            setTimeout(() => {
+                document.body.classList.add('fade-out');
+                setTimeout(() => {
+                    document.getElementById('prediction-form').submit();
+                }, 500);
+            }, 1500);
+        }
+    </script>
 </body>
 </html>

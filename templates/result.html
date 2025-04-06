@@ -5,47 +5,98 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prediction Result</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
         body {
-            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
-            color: #e0e0e0;
-            font-family: 'Arial', sans-serif;
+            background: #0A1414;
+            color: #EDF6F9;
+            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
+            position: relative;
+            opacity: 0;
+            animation: fadeInBody 0.5s ease forwards;
+        }
+
+        .lung-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, rgba(0, 109, 119, 0.3) 0%, rgba(131, 197, 190, 0.2) 50%, transparent 100%);
+            animation: waveShift 12s ease-in-out infinite;
+        }
+
+        .lung-bg::before,
+        .lung-bg::after {
+            content: '';
+            position: absolute;
+            width: 250px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(131, 197, 190, 0.3) 20%, transparent 60%);
+            border-radius: 50% 50% 30% 30%;
+            animation: breatheBg 8s ease-in-out infinite;
+        }
+
+        .lung-bg::before {
+            top: 35%;
+            left: 15%;
+            transform: rotate(-15deg);
+        }
+
+        .lung-bg::after {
+            top: 35%;
+            right: 15%;
+            transform: rotate(15deg);
         }
 
         .container {
-            background: rgba(40, 40, 40, 0.95);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+            background: rgba(10, 20, 20, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 109, 119, 0.4);
             width: 90%;
-            max-width: 500px;
+            max-width: 600px;
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(0, 109, 119, 0.5);
             text-align: center;
-            animation: slideIn 0.5s ease-in-out;
         }
 
         h1 {
-            color: #4CAF50;
-            margin-bottom: 20px;
-            font-size: 2em;
-            text-transform: uppercase;
+            color: #83C5BE;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            font-weight: 700;
             letter-spacing: 2px;
+            text-shadow: 0 0 8px rgba(0, 109, 119, 0.4);
         }
 
-        .result-box {
-            background: #3a3a3a;
+        .result-card {
+            background: rgba(0, 109, 119, 0.1);
             padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            transition: transform 0.3s ease;
+            border-radius: 15px;
+            box-shadow: 0 0 12px rgba(0, 109, 119, 0.5);
+            animation: slideIn 1s ease-out forwards;
+            position: relative;
         }
 
-        .result-box:hover {
-            transform: scale(1.02);
+        .health-node {
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, #83C5BE 30%, transparent 70%);
+            border-radius: 50%;
+            box-shadow: 0 0 12px rgba(0, 109, 119, 0.6);
+            margin: 0 auto 20px;
+            animation: spinNode 2s linear infinite;
         }
 
         p {
@@ -53,59 +104,69 @@
             margin: 10px 0;
         }
 
-        .risk-low { color: #4CAF50; }
-        .risk-moderate { color: #FFA726; }
-        .risk-high { color: #EF5350; }
+        .risk-low { color: #83C5BE; }
+        .risk-moderate { color: #FFD166; }
+        .risk-high { color: #FF6B6B; }
 
         a {
             display: inline-block;
             margin-top: 20px;
-            padding: 10px 20px;
-            background: #4CAF50;
-            color: white;
+            padding: 12px 25px;
+            background: linear-gradient(45deg, #006D77, #83C5BE);
+            color: #EDF6F9;
             text-decoration: none;
-            border-radius: 5px;
-            transition: background 0.3s ease, transform 0.2s ease;
+            border-radius: 10px;
+            box-shadow: 0 0 12px rgba(0, 109, 119, 0.5);
+            transition: all 0.3s ease;
         }
 
         a:hover {
-            background: #45a049;
             transform: scale(1.05);
+            box-shadow: 0 0 18px rgba(0, 109, 119, 0.7);
         }
 
-        .bg-image {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.1;
-            z-index: -1;
-            background: url('https://via.placeholder.com/1920x1080?text=Lung+Result') no-repeat center center;
-            background-size: cover;
+        @keyframes waveShift {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+
+        @keyframes breatheBg {
+            0% { transform: scale(1) rotate(-15deg); opacity: 0.8; }
+            50% { transform: scale(1.05) rotate(-15deg); opacity: 1; }
+            100% { transform: scale(1) rotate(-15deg); opacity: 0.8; }
+        }
+
+        @keyframes fadeInBody {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-20px); }
+            from { opacity: 0; transform: translateX(100px); }
             to { opacity: 1; transform: translateX(0); }
         }
 
+        @keyframes spinNode {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         @media (max-width: 600px) {
-            .container {
-                padding: 20px;
-                width: 95%;
-            }
-            h1 { font-size: 1.5em; }
+            .container { padding: 25px; width: 95%; }
+            h1 { font-size: 1.8em; }
             p { font-size: 1em; }
             a { font-size: 0.9em; }
+            .health-node { width: 30px; height: 30px; }
         }
     </style>
 </head>
 <body>
-    <div class="bg-image"></div>
+    <div class="lung-bg"></div>
     <div class="container">
         <h1>Prediction Result</h1>
-        <div class="result-box">
+        <div class="result-card">
+            <div class="health-node"></div>
             <p>Risk Level: <span class="risk-{{ risk.lower() }}">{{ risk }}</span></p>
             <p>Recommended Drug: {{ drug }}</p>
         </div>
